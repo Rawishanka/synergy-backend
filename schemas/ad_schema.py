@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from sqlalchemy import Date
-
+import datetime
 class CategorySchema(BaseModel):
     name: str
     description: str | None = None
@@ -24,7 +24,7 @@ class AdvertisementSchema(BaseModel):
     category_id: int
     sub_category_id: int
     location: str | None = None
-    day: Date
+    day: datetime.date
     price: int
     transaction_type: str
     is_wanted: bool = False

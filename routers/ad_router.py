@@ -1,6 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
 from dtos import ad_dto
+from database import get_db
+from models import ad_model
+from schemas import ad_schema
+from repository import ads_repository
 # from ..dependencies import get_token_header
 
 router = APIRouter(
@@ -14,15 +19,22 @@ router = APIRouter(
 fake_ads_db = {"plumbus": {"name": "Plumbus"}, "gun": {"name": "Portal Gun"}}
 
 
-@router.get("/", response_model=ad_dto.Ad)
+@router.get("/", response_model=ad_dto.AdvertisementDTO)
 async def read_ads():
     response = ad_dto.Ad(title="rasindu", body="kdkfddk", published=True)
     return response
 
 
 @router.post("/category",response_model=ad_dto.CategoryDTO)
-async def create_category():
-    return None
+async def create_category(request:ad_schema.CategorySchema ,db:Session = Depends(get_db)):
+    new_category = await ads_repository.create_category(request, db)
+    return new_category
+
+@router.post("/sub-category",response_model=ad_dto.SubCategoryDTO)
+async def create_category(request:ad_schema.SubCategorySchema ,db:Session = Depends(get_db)):
+    new_sub_category = await ads_repository.create_sub_category(request, db)
+    return new_sub_category
+
 
 @router.get("/{item_id}")
 async def read_item(item_id: str):
