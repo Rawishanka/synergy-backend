@@ -1,12 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from dtos import ad_dto
 from database import get_db
-from models import ad_model
 from schemas import ad_schema
 from repository import ads_repository
-# from ..dependencies import get_token_header
+
 
 router = APIRouter(
     prefix="/api/ads",

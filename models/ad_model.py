@@ -44,6 +44,7 @@ class Advertisement(Base):
     description = Column(String, nullable=True)
     category_id = Column(Integer, ForeignKey('categories.id'), nullable=False)
     sub_category_id = Column(Integer, ForeignKey('sub_categories.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     location = Column(String, nullable=True)
     day = Column(Date, nullable=False)
     price = Column(Integer, nullable=False)
@@ -56,3 +57,6 @@ class Advertisement(Base):
     
     category = relationship("Category", back_populates="advertisements")
     sub_category = relationship("SubCategory", back_populates="advertisements")
+    users = relationship("User", back_populates="advertisements" )
+    
+    
