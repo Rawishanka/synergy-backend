@@ -1,3 +1,4 @@
+from typing import List
 from pydantic import BaseModel
 import datetime
 # from sqlalchemy import Date
@@ -9,6 +10,10 @@ class CategoryDTO(BaseModel):
     created_by: str
     updated_by: str | None = None
     is_active: bool = True
+    
+    class Config:
+        orm_mode = True
+        from_attributes = True 
 
 class SubCategoryDTO(BaseModel):
     id:int
@@ -18,6 +23,9 @@ class SubCategoryDTO(BaseModel):
     updated_by: str | None = None
     is_active: bool = True
     category_id: int
+    class Config:
+        orm_mode = True
+        from_attributes = True 
 
 class AdvertisementDTO(BaseModel):
     id:int
@@ -34,3 +42,15 @@ class AdvertisementDTO(BaseModel):
     is_wanted: bool = False
     created_by: str
     updated_by: str | None = None
+    class Config:
+        orm_mode = True
+        from_attributes = True 
+        
+class AdvertisementSearchFilterDTO (BaseModel):
+    advertisements:List[AdvertisementDTO]
+    total_pages : int
+    current_page :int
+    total_count:int
+    class Config:
+        orm_mode = True
+    

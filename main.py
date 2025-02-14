@@ -1,3 +1,4 @@
+import asyncio
 from fastapi import FastAPI
 from typing import Optional
 from database import engine
@@ -9,9 +10,26 @@ from database import Base
 
 
 
-app = FastAPI()
-Base.metadata.create_all(bind=engine)
 
+#Base.metadata.create_all(bind=engine)
+
+# Function to create all tables asynchronously
+async def create_all_tables():
+    # Use an AsyncSession with engine.begin() to perform DDL operations
+    async with engine.connect() as conn:
+        # Execute raw DDL statements to create all tables
+        await conn.run_sync(Base.metadata.create_all)
+
+# Lifespan event to handle startup and shutdown actions
+async def lifespan(app: FastAPI):
+    # Startup logic: Create tables
+    await create_all_tables()
+    
+    # Yield control back to FastAPI
+    yield
+
+# FastAPI app with lifespan event handler
+app = FastAPI(lifespan=lifespan)
 
 app.include_router(login_router.router)
 app.include_router(ad_router.router)

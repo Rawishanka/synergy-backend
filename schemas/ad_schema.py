@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel
 from sqlalchemy import Date
 import datetime
@@ -23,6 +24,7 @@ class AdvertisementSchema(BaseModel):
     description: str | None = None
     category_id: int
     sub_category_id: int
+    user_id:int
     location: str | None = None
     day: datetime.date
     price: int
@@ -30,3 +32,13 @@ class AdvertisementSchema(BaseModel):
     is_wanted: bool = False
     created_by: str
     updated_by: str | None = None
+    
+class AdvertisementSearchFilterSchema(BaseModel):
+    search: str  # Search term to match in title or description
+    category_id: Optional[int] = None
+    sub_category_id: Optional[int] = None
+    sort: str  # Sorting field like "price_asc", "price_desc", etc.
+    page: int = 1  # Default to page 1
+    per_page: int = 10  # Default to 10 items per page
+    class Config:
+        orm_mode = True
