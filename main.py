@@ -7,7 +7,7 @@ from routers import user_router
 from routers import login_router
 from models import ad_model
 from database import Base
-
+from fastapi.middleware.cors import CORSMiddleware
 
 
 
@@ -30,6 +30,21 @@ async def lifespan(app: FastAPI):
 
 # FastAPI app with lifespan event handler
 app = FastAPI(lifespan=lifespan)
+
+
+# Add CORS middleware
+origins = [
+    "http://localhost:3000",  # React app running locally
+    "https://yourfrontenddomain.com",  # Add other domains if needed
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # Allows specified origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
 
 app.include_router(login_router.router)
 app.include_router(ad_router.router)
