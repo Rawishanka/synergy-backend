@@ -2,35 +2,24 @@ import asyncio
 from fastapi import FastAPI
 from typing import Optional
 from database import engine
-from routers import ad_router
-from routers import user_router
-from routers import login_router
+from routers import ad_router, user_router, login_router  # Grouped imports for cleaner code
 from models import ad_model
 from database import Base
 from fastapi.middleware.cors import CORSMiddleware
 
-
-
-#Base.metadata.create_all(bind=engine)
+# Initialize FastAPI app first
+app = FastAPI()
 
 # Function to create all tables asynchronously
 async def create_all_tables():
-    # Use an AsyncSession with engine.begin() to perform DDL operations
-    async with engine.connect() as conn:
-        # Execute raw DDL statements to create all tables
+    # Use an AsyncSession with engine.connect() to perform DDL operations
+    async with engine.begin() as conn:  # Use begin() instead of connect()
         await conn.run_sync(Base.metadata.create_all)
 
-# Lifespan event to handle startup and shutdown actions
-async def lifespan(app: FastAPI):
-    # Startup logic: Create tables
+# Register startup event
+@app.on_event("startup")
+async def on_startup():
     await create_all_tables()
-    
-    # Yield control back to FastAPI
-    yield
-
-# FastAPI app with lifespan event handler
-app = FastAPI(lifespan=lifespan)
-
 
 # Add CORS middleware
 origins = [
@@ -46,8 +35,7 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
+# Include routers
 app.include_router(login_router.router)
 app.include_router(ad_router.router)
 app.include_router(user_router.router)
-
-

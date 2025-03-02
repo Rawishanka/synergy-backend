@@ -1,5 +1,7 @@
+from datetime import date
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException
+from uuid import uuid4
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from dtos import ad_dto
 from database import get_db
 from schemas import ad_schema
@@ -47,10 +49,40 @@ async def get_category(db:AsyncSession = Depends(get_db)):
     return category_list
 
 
-@router.post("/advertisement",response_model=ad_dto.AdvertisementDTO)
-async def create_ad(request:ad_schema.AdvertisementSchema ,db:AsyncSession = Depends(get_db)):
-    new_ad = await ads_repository.create_ad(request, db)
-    return new_ad
+@router.post("/advertisement")
+async def create_ad_by_user(
+    title: str = Form(...),
+    url: str | None = Form(None),
+    description: str | None = Form(None),
+    category_id: int = Form(...),
+    sub_category_id: int = Form(...),
+    user_id: int = Form(...),
+    location: str | None = Form(None),
+    price: int = Form(...),
+    transaction_type: str = Form(...),
+    is_wanted: bool = Form(False),
+    created_by: str = Form(...),
+    updated_by: str | None = Form(None),
+    image: UploadFile | None = File(None),  # Image is now a File input
+    db: AsyncSession = Depends(get_db)
+):
+    result = await ads_repository.store_image(db, image)
+    if result > 0:
+        new_ad = ad_schema.AdvertisementSchema(title=title, url=url,description=description, category_id=category_id, sub_category_id=sub_category_id,user_id=user_id,location=location,day=date.today(), price=price,transaction_type=transaction_type,is_wanted=is_wanted,created_by=created_by,updated_by=updated_by, image_id=result)
+        response = await ads_repository.create_ad(new_ad, db)
+        return response
+    else:
+        raise HTTPException(
+            status_code=403, detail="You can only update the item: plumbus"
+        )
+
+    
+
+
+@router.get("/advertisement/{user_id}")
+async def generate(user_id:int, db:AsyncSession = Depends(get_db) ):
+    result = await ads_repository.get_user_advertisement(db,id=user_id)
+    return result
 
 
 @router.get("/advertisement", response_model=ad_dto.AdvertisementSearchFilterDTO)
@@ -91,3 +123,14 @@ async def update_item(item_id: str):
             status_code=403, detail="You can only update the item: plumbus"
         )
     return {"item_id": item_id, "name": "The great Plumbus"}
+
+
+
+
+    
+
+
+@router.get("/generate/{id}")
+async def get_generate(id:str, db:AsyncSession = Depends(get_db)):
+    
+    return id

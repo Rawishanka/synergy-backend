@@ -1,0 +1,29 @@
+{
+    "first_name": "Prasad",
+    "last_name": "Silva",
+    "user_name": "Prasad",
+    "email": "prasad@gmail.com",
+    "password": "Prasad",
+    "phone_number": "1234567",
+    "is_admin": false,
+    "created_by": "user",
+    "updated_by": "user",
+    "is_active": true
+  }
+
+  {
+    "title": "string",
+    "url": "https://ikman.lk/en/ad/ps5-games-ac-valhalla-for-sale-colombo",
+    "image_url": "https://i.ikman-st.com/ps5-games-ac-valhalla-for-sale-colombo/d679d477-b724-42cc-bb0c-2d8f4e829a38/620/466/fitted.jpg,https://i.ikman-st.com/ps5-games-ac-valhalla-for-sale-colombo/d679d477-b724-42cc-bb0c-2d8f4e829a38/100/70/cropped.jpg,https://i.ikman-st.com/ps5-games-ac-valhalla-for-sale-colombo/5182596e-847c-49ba-83fb-25afef7d731c/100/70/cropped.jpg",
+    "description": "Assassins creed Valhalla ps5 In great condition Can check thoroughly and buy Sale or exchange Dehiwala Show more",
+    "category_id": 2,
+    "sub_category_id": 12,
+    "user_id": 0,
+    "location": "Dehiwala,  Colombo",
+    "day": "2025-01-05",
+    "price": 5500,
+    "transaction_type": "sale",
+    "is_wanted": false,
+    "created_by": "user",
+    "updated_by": "user"
+  }

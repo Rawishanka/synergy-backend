@@ -1,4 +1,5 @@
 from typing import Optional
+from fastapi import UploadFile
 from pydantic import BaseModel
 from sqlalchemy import Date
 import datetime
@@ -32,6 +33,7 @@ class AdvertisementSchema(BaseModel):
     is_wanted: bool = False
     created_by: str
     updated_by: str | None = None
+    image_id:int|None 
     
 class AdvertisementSearchFilterSchema(BaseModel):
     search: str  # Search term to match in title or description

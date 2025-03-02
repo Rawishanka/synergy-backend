@@ -17,7 +17,11 @@ router = APIRouter(
 
 
 
-@router.post('/', response_model=user_dto.UserDTO)
-async def create_user(current_user: Annotated[token.TokenData, Depends(token.get_current_user)], request:user_schema.UserSchema, db: AsyncSession = Depends(get_db)):
+@router.post('/',  response_model=user_dto.UserDTO)
+async def create_user(request:user_schema.UserSchema, db: AsyncSession = Depends(get_db)):
     new_user = await user_repository.create_user(request, db)
     return new_user
+# @router.post('/', response_model=user_dto.UserDTO)
+# async def create_user(current_user: Annotated[token.TokenData, Depends(token.get_current_user)], request:user_schema.UserSchema, db: AsyncSession = Depends(get_db)):
+#     new_user = await user_repository.create_user(request, db)
+#     return new_user
